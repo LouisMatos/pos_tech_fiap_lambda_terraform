@@ -18,7 +18,7 @@ resource "aws_iam_role" "lambda_role" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 
   lifecycle {
-    ignore_changes = all
+    ignore_changes = [assume_role_policy]
   }
 }
 
