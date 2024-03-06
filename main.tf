@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "lambda" {
 
 resource "aws_s3_bucket" "bucket" {
   bucket = "codigo_lambda"
-  
+
   lifecycle {
     ignore_changes = all
   }
