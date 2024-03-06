@@ -16,6 +16,10 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 resource "aws_iam_role" "lambda_role" {
   name               = "lambda_role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 data "aws_iam_policy_document" "lambda" {
@@ -31,7 +35,7 @@ data "aws_iam_policy_document" "lambda" {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = "codigo_lambda"
+  bucket = "codigo-lambda"
 
   lifecycle {
     ignore_changes = all
@@ -53,7 +57,7 @@ resource "aws_lambda_function" "code_lambda_autenticacao_cliente" {
   function_name = "lambda_autenticacao_cliente"
   role          = aws_iam_role.lambda_role.arn
 
-  s3_bucket = "codigo_lambda"
+  s3_bucket = "codigo-lambda"
   s3_key    = "lambda.zip"
 
   runtime = "python3.10"
