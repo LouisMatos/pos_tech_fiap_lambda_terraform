@@ -38,6 +38,11 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
+resource "aws_s3_bucket_acl" "bucket_acl" {
+  bucket = aws_s3_bucket.bucket.id
+  acl    = "private"
+}
+
 resource "aws_iam_role_policy" "lambda" {
   name   = "lambda"
   role   = aws_iam_role.lambda_role.id
