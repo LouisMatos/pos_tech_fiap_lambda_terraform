@@ -34,14 +34,6 @@ data "aws_iam_policy_document" "lambda" {
   }
 }
 
-resource "aws_s3_bucket" "bucket" {
-  bucket = "codigo-lambda"
-
-  lifecycle {
-    ignore_changes = all
-  }
-}
-
 
 resource "aws_iam_role_policy" "lambda" {
   name   = "lambda"
@@ -49,13 +41,17 @@ resource "aws_iam_role_policy" "lambda" {
   policy = data.aws_iam_policy_document.lambda.json
 }
 
+
 resource "aws_lambda_function" "code_lambda_autenticacao_cliente" {
   function_name = "lambda_autenticacao_cliente"
-  role          = aws_iam_role.lambda_role.arn
 
-  s3_bucket = "codigo-lambda"
-  s3_key    = "lambda.zip"
+  image_uri = var.ecr_repository + "/pos_tech_fiap:latest"
 
-  runtime = "python3.10"
-  handler = "lambda_function.lambda_handler"
+  package_type = "Image"
+
+  role = aws_iam_role.lambda_role.arn
+
+  timeout = 60
+
+  memory_size = 128
 }

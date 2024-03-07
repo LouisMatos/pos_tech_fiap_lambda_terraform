@@ -15,3 +15,9 @@ variable "aws_profile" {
   default     = "app_deployment_dev"
   description = "AWS profile which is used for the deployment"
 }
+
+variable "ecr_repository" {
+  type        = string
+  default     = "470692656758.dkr.ecr.us-east-1.amazonaws.com"
+  description = "Ecr repository for the application"
+}
