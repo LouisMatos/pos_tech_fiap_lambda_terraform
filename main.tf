@@ -45,7 +45,7 @@ resource "aws_iam_role_policy" "lambda" {
 resource "aws_lambda_function" "code_lambda_autenticacao_cliente" {
   function_name = "lambda_autenticacao_cliente"
 
-  image_uri = var.ecr_repository + "/pos_tech_fiap:latest"
+  image_uri = "${var.ecr_repository}/pos_tech_fiap:latest"
 
   package_type = "Image"
 
