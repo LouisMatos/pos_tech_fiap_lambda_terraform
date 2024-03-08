@@ -21,3 +21,8 @@ variable "ecr_repository" {
   default     = "470692656758.dkr.ecr.us-east-1.amazonaws.com"
   description = "Ecr repository for the application"
 }
+
+variable "github_run_id" {
+  description = "The ID of the GitHub Actions run"
+  type        = string
+}

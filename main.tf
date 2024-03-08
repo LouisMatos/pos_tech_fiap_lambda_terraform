@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "lambda_role_${github.run_id}"
+  name               = "lambda_role_${var.github_run_id}"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
