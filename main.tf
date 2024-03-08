@@ -2,23 +2,24 @@ provider "aws" {
   region = "us-east-1"
 }
 
-data "aws_iam_policy_document" "lambda_assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
+module "iam_assumable_role_create" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-create"
+  version = "~> 4.0"
 
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "lambda_role" {
-  name               = "lambda_role"
-  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
-
-  lifecycle {
-    ignore_changes = [assume_role_policy]
+  create_role      = true
+  role_name        = "lambda_role"
+  role_description = "Role for Lambda"
+  trust_policy_document = {
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Effect = "Allow"
+      },
+    ]
   }
 }
 
@@ -37,7 +38,7 @@ data "aws_iam_policy_document" "lambda" {
 
 resource "aws_iam_role_policy" "lambda" {
   name   = "lambda"
-  role   = aws_iam_role.lambda_role.id
+  role   = module.iam_assumable_role_create.iam_role_arn
   policy = data.aws_iam_policy_document.lambda.json
 }
 
@@ -49,7 +50,7 @@ resource "aws_lambda_function" "code_lambda_autenticacao_cliente" {
 
   package_type = "Image"
 
-  role = aws_iam_role.lambda_role.arn
+  role = module.iam_assumable_role_create.iam_role_arn
 
   timeout = 60
 
