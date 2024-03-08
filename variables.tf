@@ -25,4 +25,5 @@ variable "ecr_repository" {
 variable "github_run_id" {
   description = "The ID of the GitHub Actions run"
   type        = string
+  default     = "123_123"
 }
