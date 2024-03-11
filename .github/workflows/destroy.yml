@@ -1,0 +1,44 @@
+name: Ação manual para destruir recursos AWS
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Destroy recursos AWS'
+        required: true
+        default: 'sim_destruir_recursos_aws'
+
+jobs:
+  destroy:
+    name: "Destroy AWS"
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws-region: ${{ secrets.AWS_REGION }}
+
+        - name: Terraform Init
+          run: terraform init     
+
+        - name: AWS Plan Copy
+          run: aws s3 cp s3://terraformestado/lambdaterraform/terraform.tfstate terraform.tfstate
+          id: copy
+
+        - name: Show Destroy plan
+          run: terraform plan -destroy
+          continue-on-error: true
+
+        - name: Destroy resources jobs
+          id: destroy
+          run: terraform destroy -auto-approve
+
+        - name: Delete plan file
+          if: steps.destroy.outcome == 'success'
+          run: aws s3 rm s3://terraformestado/lambdaterraform/terraform.tfstate
+

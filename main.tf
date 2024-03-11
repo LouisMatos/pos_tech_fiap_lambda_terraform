@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "lambda_role"
+  name               = "lambda_role_${var.github_run_id}"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
@@ -30,19 +30,24 @@ data "aws_iam_policy_document" "lambda" {
   }
 }
 
+
 resource "aws_iam_role_policy" "lambda" {
   name   = "lambda"
   role   = aws_iam_role.lambda_role.id
   policy = data.aws_iam_policy_document.lambda.json
 }
 
+
 resource "aws_lambda_function" "code_lambda_autenticacao_cliente" {
   function_name = "lambda_autenticacao_cliente"
-  role          = aws_iam_role.lambda_role.arn
 
-  s3_bucket = "codigo-lambda"
-  s3_key    = "lambda.zip"
+  image_uri = "${var.ecr_repository}/pos_tech_fiap:latest"
 
-  runtime = "python3.10"
-  handler = "lambda_function.lambda_handler"
+  package_type = "Image"
+
+  role = aws_iam_role.lambda_role.arn
+
+  timeout = 60
+
+  memory_size = 128
 }
