@@ -14,3 +14,15 @@ module "master" {
   memory_size = var.memory_size
 }
 
+module "gtw" {
+  source = "./modules/gtw"
+
+  name_role =   var.name_role
+
+  name_api_gtw             = var.name_api_gtw
+  description_name_api_gtw = var.description_name_api_gtw
+  path_lambda_pos_tech     = var.path_lambda_pos_tech
+  jlapp_lambda             = module.master.jlapp_lambda
+
+}
+

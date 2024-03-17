@@ -10,4 +10,5 @@ resource "aws_lambda_function" "jlapp_lambda" {
   timeout = var.timeout
 
   memory_size = var.memory_size
+
 }
