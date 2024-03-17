@@ -4,26 +4,44 @@ variable "aws_region" {
   description = "AWS region"
 }
 
-variable "environment" {
+variable "function_name" {
+  default     = "jlapp-lambda-cliente"
   type        = string
-  default     = "dev"
-  description = "Application Environment, such as dev, prod"
-}
-
-variable "aws_profile" {
-  type        = string
-  default     = "app_deployment_dev"
-  description = "AWS profile which is used for the deployment"
+  description = "Name of the Lambda function"
 }
 
 variable "ecr_repository" {
-  type        = string
   default     = "470692656758.dkr.ecr.us-east-1.amazonaws.com"
-  description = "Ecr repository for the application"
+  type        = string
+  description = "Name of the ECR repository"
 }
 
-variable "github_run_id" {
-  description = "The ID of the GitHub Actions run"
+variable "imagem_name" {
+  default     = "pos_tech_fiap:latest"
   type        = string
-  default     = "123_123"
+  description = "Name of the image"
+}
+
+variable "package_type" {
+  default     = "Image"
+  type        = string
+  description = "Type of the package"
+}
+
+variable "timeout" {
+  default     = 60
+  type        = number
+  description = "Timeout of the function"
+}
+
+variable "memory_size" {
+  default     = 128
+  type        = number
+  description = "Memory size of the function"
+}
+
+variable "version_role" {
+  default     = "0.0.1"
+  type        = string
+  description = "Role of the function"
 }
