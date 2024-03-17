@@ -63,6 +63,17 @@ variable "path_lambda_pos_tech" {
   type        = string
   description = "Path of the Lambda"
 }
+variable "path_lambda_pos_tech_jwt" {
+  default     = "jwt"
+  type        = string
+  description = "Path of the Lambda"
+}
+
+variable "path_lambda_pos_tech_cpf" {
+  default     = "{cpf}"
+  type        = string
+  description = "Path of the Lambda"
+}
 
 variable "name_role" {
     default     = "jlapp-lambda-role"
