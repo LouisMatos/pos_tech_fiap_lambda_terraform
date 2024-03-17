@@ -23,6 +23,9 @@ module "gtw" {
   description_name_api_gtw = var.description_name_api_gtw
   path_lambda_pos_tech     = var.path_lambda_pos_tech
   jlapp_lambda             = module.master.jlapp_lambda
+  path_lambda_pos_tech_jwt = var.path_lambda_pos_tech_jwt
+  path_lambda_pos_tech_cpf = var.path_lambda_pos_tech_cpf
+
 
 }
 
