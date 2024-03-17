@@ -45,3 +45,27 @@ variable "version_role" {
   type        = string
   description = "Role of the function"
 }
+
+variable "name_api_gtw" {
+  default     = "jlapp-api-gtw"
+  type        = string
+  description = "Name of the API Gateway"
+}
+
+variable "description_name_api_gtw" {
+  default     = "API Gateway for jlapp"
+  type        = string
+  description = "Description of the API Gateway"
+}
+
+variable "path_lambda_pos_tech" {
+  default     = "cliente"
+  type        = string
+  description = "Path of the Lambda"
+}
+
+variable "name_role" {
+    default     = "jlapp-lambda-role"
+    type        = string
+    description = "Name of the role"
+}
