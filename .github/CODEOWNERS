@@ -1,0 +1,5 @@
+# CODEOWNERS
+#
+# Placeholder team — replace with the real infra/platform team handle(s)
+# before this is relied on for required-review enforcement.
+* @postechfiap/infra
