@@ -33,10 +33,12 @@ data "aws_iam_policy_document" "dynamodb_access" {
     ]
 
     resources = [
-      "arn:aws:dynamodb:${var.aws_region}:*:table/*"
+      "arn:aws:dynamodb:${var.aws_region}:${data.aws_caller_identity.current.account_id}:table/${var.dynamodb_table_name}"
     ]
   }
 }
+
+data "aws_caller_identity" "current" {}
 
 resource "aws_iam_policy" "dynamodb_access" {
   name        = "DynamoDBAccessPolicy"

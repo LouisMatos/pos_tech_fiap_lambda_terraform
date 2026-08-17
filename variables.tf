@@ -4,22 +4,28 @@ variable "aws_region" {
   description = "AWS region"
 }
 
+variable "environment" {
+  type        = string
+  default     = "dev"
+  description = "Ambiente (dev/hom/prod) - usado como nome do stage do API Gateway e para nomear a funcao Lambda"
+}
+
+variable "dynamodb_table_name" {
+  type        = string
+  default     = "Customers-dev"
+  description = "Nome da tabela DynamoDB (repo pos_tech_fiap_db) que esta Lambda acessa - precisa bater com var.table_name la, por ambiente"
+}
+
 variable "function_name" {
   default     = "jlapp-lambda-cliente"
   type        = string
   description = "Name of the Lambda function"
 }
 
-variable "ecr_repository" {
-  default     = "470692656758.dkr.ecr.us-east-1.amazonaws.com"
-  type        = string
-  description = "Name of the ECR repository"
-}
-
 variable "imagem_name" {
-  default     = "pos_tech_fiap:latest"
+  default     = "jlapp-lambda:latest"
   type        = string
-  description = "Name of the image"
+  description = "Nome do repo ECR + tag da imagem (ex: jlapp-lambda:sha-<commit>). CI sobrescreve via -var em cada deploy."
 }
 
 variable "package_type" {
@@ -76,7 +82,7 @@ variable "path_lambda_pos_tech_cpf" {
 }
 
 variable "name_role" {
-    default     = "jlapp-lambda-role"
-    type        = string
-    description = "Name of the role"
+  default     = "jlapp-lambda-role"
+  type        = string
+  description = "Name of the role"
 }

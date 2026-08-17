@@ -4,20 +4,21 @@ module "master" {
   aws_region   = var.aws_region
   version_role = var.version_role
 
-  function_name  = var.function_name
-  ecr_repository = var.ecr_repository
-  imagem_name    = var.imagem_name
-  package_type   = var.package_type
+  function_name = var.function_name
+  imagem_name   = var.imagem_name
+  package_type  = var.package_type
 
   timeout = var.timeout
 
   memory_size = var.memory_size
+
+  dynamodb_table_name = var.dynamodb_table_name
 }
 
 module "gtw" {
   source = "./modules/gtw"
 
-  name_role =   var.name_role
+  name_role = var.name_role
 
   name_api_gtw             = var.name_api_gtw
   description_name_api_gtw = var.description_name_api_gtw
@@ -25,6 +26,7 @@ module "gtw" {
   jlapp_lambda             = module.master.jlapp_lambda
   path_lambda_pos_tech_jwt = var.path_lambda_pos_tech_jwt
   path_lambda_pos_tech_cpf = var.path_lambda_pos_tech_cpf
+  stage_name               = var.environment
 
 
 }

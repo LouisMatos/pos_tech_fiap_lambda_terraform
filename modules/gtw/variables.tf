@@ -5,3 +5,6 @@ variable "path_lambda_pos_tech" {}
 variable "path_lambda_pos_tech_jwt" {}
 variable "path_lambda_pos_tech_cpf" {}
 variable "jlapp_lambda" {}
+variable "stage_name" {
+  default = "dev"
+}
