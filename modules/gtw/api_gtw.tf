@@ -89,7 +89,7 @@ resource "aws_lambda_permission" "apigw" {
   function_name = var.jlapp_lambda.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn ="${aws_api_gateway_rest_api.lambda_api_gtw.execution_arn}/*/${aws_api_gateway_method.lambda_get_cliente.http_method}${aws_api_gateway_resource.lambda_api_gtw_resource.path}"
+  source_arn = "${aws_api_gateway_rest_api.lambda_api_gtw.execution_arn}/*/${aws_api_gateway_method.lambda_get_cliente.http_method}${aws_api_gateway_resource.lambda_api_gtw_resource.path}"
   depends_on = [aws_api_gateway_deployment.prod_deployment]
 }
 
@@ -100,7 +100,7 @@ resource "aws_lambda_permission" "apigw_jwt" {
   function_name = var.jlapp_lambda.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn ="${aws_api_gateway_rest_api.lambda_api_gtw.execution_arn}/*/${aws_api_gateway_method.lambda_post_jws.http_method}${aws_api_gateway_resource.lambda_api_gtw_resource_jws.path}"
+  source_arn = "${aws_api_gateway_rest_api.lambda_api_gtw.execution_arn}/*/${aws_api_gateway_method.lambda_post_jws.http_method}${aws_api_gateway_resource.lambda_api_gtw_resource_jws.path}"
   depends_on = [aws_api_gateway_deployment.prod_deployment]
 }
 
@@ -111,7 +111,7 @@ resource "aws_lambda_permission" "apigw_cpf" {
   function_name = var.jlapp_lambda.function_name
   principal     = "apigateway.amazonaws.com"
 
-  source_arn ="${aws_api_gateway_rest_api.lambda_api_gtw.execution_arn}/*/${aws_api_gateway_method.lambda_get_cliente_cpf.http_method}${aws_api_gateway_resource.lambda_api_gtw_resource_cpf.path}"
+  source_arn = "${aws_api_gateway_rest_api.lambda_api_gtw.execution_arn}/*/${aws_api_gateway_method.lambda_get_cliente_cpf.http_method}${aws_api_gateway_resource.lambda_api_gtw_resource_cpf.path}"
   depends_on = [aws_api_gateway_deployment.prod_deployment]
 }
 
@@ -121,6 +121,6 @@ resource "aws_lambda_permission" "apigw_cpf" {
 resource "aws_api_gateway_deployment" "prod_deployment" {
   depends_on  = [aws_api_gateway_integration.lambda]
   rest_api_id = aws_api_gateway_rest_api.lambda_api_gtw.id
-  stage_name  = "prod"
+  stage_name  = var.stage_name
 }
 

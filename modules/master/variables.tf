@@ -1,8 +1,6 @@
-variable "aws_region" { }
+variable "aws_region" {}
 
-variable "ecr_repository" { }
-
-variable "function_name" { }
+variable "function_name" {}
 
 variable "imagem_name" {}
 
@@ -13,3 +11,5 @@ variable "timeout" {}
 variable "memory_size" {}
 
 variable "version_role" {}
+
+variable "dynamodb_table_name" {}

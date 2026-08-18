@@ -3,42 +3,53 @@ name: Ação manual para destruir recursos AWS
 on:
   workflow_dispatch:
     inputs:
-      env:
-        description: 'Destroy recursos AWS'
+      environment:
+        description: 'Ambiente a destruir'
         required: true
-        default: 'sim_destruir_recursos_aws'
+        type: choice
+        options:
+          - hom
+          - prod
+      confirm:
+        description: 'Digite exatamente "destroy" para confirmar a destruicao dos recursos'
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   destroy:
     name: "Destroy AWS"
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+      - name: Validate confirmation input
+        if: inputs.confirm != 'destroy'
+        run: |
+          echo "Confirmation text did not match 'destroy'. Aborting."
+          exit 1
 
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-              aws-region: ${{ secrets.AWS_REGION }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Terraform Init
-          run: terraform init     
+      - uses: hashicorp/setup-terraform@v3
 
-        - name: AWS Plan Copy
-          run: aws s3 cp s3://terraformestado/lambdaterraform/terraform.tfstate terraform.tfstate
-          id: copy
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-pos_tech_fiap_lambda_terraform
+          aws-region: ${{ secrets.AWS_REGION }}
 
-        - name: Show Destroy plan
-          run: terraform plan -destroy
-          continue-on-error: true
+      - name: Terraform Init
+        run: terraform init -backend-config=envs/${{ inputs.environment }}-backend.hcl
 
-        - name: Destroy resources jobs
-          id: destroy
-          run: terraform destroy -auto-approve
+      - name: Terraform Workspace
+        run: terraform workspace select -or-create ${{ inputs.environment }}
 
-        - name: Delete plan file
-          if: steps.destroy.outcome == 'success'
-          run: aws s3 rm s3://terraformestado/lambdaterraform/terraform.tfstate
+      - name: Show Destroy plan
+        run: terraform plan -destroy -var-file=envs/${{ inputs.environment }}.tfvars
 
+      - name: Destroy resources
+        id: destroy
+        run: terraform destroy -var-file=envs/${{ inputs.environment }}.tfvars -auto-approve
