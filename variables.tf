@@ -46,6 +46,17 @@ variable "memory_size" {
   description = "Memory size of the function"
 }
 
+variable "lambda_arch" {
+  default     = "x86_64"
+  type        = string
+  description = "Arquitetura da Lambda (x86_64 ou arm64); precisa bater com a plataforma da imagem no ECR"
+
+  validation {
+    condition     = contains(["x86_64", "arm64"], var.lambda_arch)
+    error_message = "lambda_arch deve ser x86_64 ou arm64."
+  }
+}
+
 variable "version_role" {
   default     = "0.0.1"
   type        = string
@@ -79,10 +90,4 @@ variable "path_lambda_pos_tech_cpf" {
   default     = "{cpf}"
   type        = string
   description = "Path of the Lambda"
-}
-
-variable "name_role" {
-  default     = "jlapp-lambda-role"
-  type        = string
-  description = "Name of the role"
 }

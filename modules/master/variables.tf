@@ -10,6 +10,10 @@ variable "timeout" {}
 
 variable "memory_size" {}
 
+variable "lambda_arch" {}
+
+variable "environment" {}
+
 variable "version_role" {}
 
 variable "dynamodb_table_name" {}

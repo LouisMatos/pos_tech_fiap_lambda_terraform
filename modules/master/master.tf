@@ -13,12 +13,22 @@ resource "aws_lambda_function" "jlapp_lambda" {
 
   memory_size = var.memory_size
 
+  architectures = [var.lambda_arch]
+
   environment {
     variables = {
       DYNAMODB_TABLE_NAME = var.dynamodb_table_name
       JWT_SECRET          = random_password.jwt_secret.result
     }
   }
+
+  depends_on = [aws_cloudwatch_log_group.lambda]
+}
+
+# Criado pelo Terraform para ter retencao e sumir no destroy (a Lambda criaria um sem expiracao).
+resource "aws_cloudwatch_log_group" "lambda" {
+  name              = "/aws/lambda/${var.function_name}"
+  retention_in_days = 7
 }
 
 # Gerado pelo Terraform - nunca mais hardcoded no codigo/CI.
