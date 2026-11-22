@@ -12,12 +12,11 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 data "aws_iam_policy_document" "lambda" {
   statement {
     actions = [
-      "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
 
-    resources = ["*"]
+    resources = ["${aws_cloudwatch_log_group.lambda.arn}:*"]
   }
 }
 
@@ -25,11 +24,7 @@ data "aws_iam_policy_document" "dynamodb_access" {
   statement {
     actions = [
       "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:UpdateItem",
-      "dynamodb:DeleteItem",
-      "dynamodb:Scan",
-      "dynamodb:Query"
+      "dynamodb:PutItem"
     ]
 
     resources = [
@@ -41,7 +36,7 @@ data "aws_iam_policy_document" "dynamodb_access" {
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_policy" "dynamodb_access" {
-  name        = "DynamoDBAccessPolicy"
+  name        = "DynamoDBAccessPolicy-${var.environment}"
   description = "Policy to allow Lambda function to access DynamoDB"
   policy      = data.aws_iam_policy_document.dynamodb_access.json
 }

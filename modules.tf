@@ -12,13 +12,15 @@ module "master" {
 
   memory_size = var.memory_size
 
+  lambda_arch = var.lambda_arch
+
+  environment = var.environment
+
   dynamodb_table_name = var.dynamodb_table_name
 }
 
 module "gtw" {
   source = "./modules/gtw"
-
-  name_role = var.name_role
 
   name_api_gtw             = var.name_api_gtw
   description_name_api_gtw = var.description_name_api_gtw
